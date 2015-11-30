@@ -1,0 +1,2 @@
+Auto-grading framework.
+Simple framework for auto-grading problem sets. Otto won't hang if a student writes an infinite loop that does not allocation.

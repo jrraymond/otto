@@ -1,0 +1,10 @@
+opam-version: "1"
+maintainer: "jraymond@wesleyan.edu"
+build: [
+  [make "build"]
+  [make "install"]
+]
+remove: [
+  ["ocamlfind" "remove" "otto"]
+]
+depends: ["ocamlfind"]
