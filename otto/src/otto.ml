@@ -1,11 +1,16 @@
 (* Justin Raymond *)
 
-(*** tests ***)
-type output =
-  | Pass of string
-  | Fail of string
-  | Group of string * output list
+(* Want tree data structure of tests.
+ * we cant do this because we want heterogeneous test suites.
+ * Instead we use a list of functions : Unit -> Unit.
+ * To run the tests we call the functions. The idea is to represent
+ * tests as what they do. A test is an action which when run,
+ * produces some output. What that output does is determined by the 
+ * log parameter, which is responsible for printing the output. *)
 
+(* The logger is a global reference to a function.
+ * The pass/fail counter is a global reference to a list.
+ * *)
 let const x _ = x
 let logger_fun = ref (fun _ -> ())
 let default_logger = fun s -> Printf.printf "%s" s; flush stdout
@@ -30,15 +35,6 @@ let inc_fail_count () =
   let (p, f) = pop_pass_fail_count () in
   push_pass_fail_count (p, f + 1)
 let print_counts () = List.iter (fun (p,f) -> Printf.printf "%i,%i|" p f; flush stdout) !pass_fail_count
-
-(* we cant do this because we want heterogeneous test suites.
- * Instead we use a list of functions : Unit -> Unit.
- * To run the tests we call the functions. The idea is to represent
- * tests as what they do. A test is an action which when run,
- * produces some output. What that output does is determined by the 
- * log parameter, which is responsible for printing the output. *)
-(* I guess the next question I have is how do I count pass/fails.
- * I think the logger function may have some internal state maybe? *)
 
 type ('a, 'b) either = Left of 'a | Right of 'b
 
