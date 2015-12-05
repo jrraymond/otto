@@ -7,4 +7,5 @@ let rec fibonacci i =
   | _ -> fibonacci (i - 1) + fibonacci (i - 2)
 
 
-let rec factorial i = i * factorial i
+let rec factorial i = 
+  if i < 2 then 1 else i * factorial (i - 1)

@@ -1,0 +1,25 @@
+OASISFormat: 0.4
+Name:        otto
+Version:     0.1
+Synopsis:    Auto-grading framework
+Authors:     Justin Raymond
+License:     GPL-2.0
+
+Library otto
+  Path: src
+  BuildTools: ocamlbuild
+  Modules:    Otto
+  BuildDepends: unix
+
+Executable test
+  Path: test
+  BuildDepends: otto
+  Install: false
+  MainIs: test.ml
+  BuildTools: ocamlbuild
+  Build$: flag(tests)
+  
+Test main
+  Command: $test
+  WorkingDirectory: test
+  TestTools: test
