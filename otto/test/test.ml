@@ -87,8 +87,8 @@ let suite =
       [ otest Hw1.bad_will_fail 0 0 ];
       tgroup_h ~msg:"bad will loop" (=) string_of_int string_of_int
       [ otest Hw1.bad_will_loop 0 0 ];
-      tgroup_h ~msg:"should fail" (=) string_of_int string_of_int
-      [ otest Hw1.should_fail 0 0 ];
+      tgroup ~msg:"should fail"
+      [ ftest Hw1.should_fail 0 Hw1.NO_RULE (=) string_of_int Printexc.to_string ];
     ]
   ]
       

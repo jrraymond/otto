@@ -38,6 +38,11 @@ let print_counts () = List.iter (fun (p,f) -> Printf.printf "%i,%i|" p f; flush 
 
 type ('a, 'b) either = Left of 'a | Right of 'b
 
+let from_either fl fr eith = 
+  match eith with
+  | Right x -> fr x
+  | Left x -> fl x
+
 (* kills process, smothers error if process does not exist *)
 let kill pid sign = 
   try Unix.kill pid sign with
@@ -66,7 +71,11 @@ let timeout f arg time default =
                  let result = (Marshal.from_channel ic : 'b option) in
                  result ));;
 
-let catcher func args = try Right (func args) with e -> Left e;;
+let catcher func checker args =
+  try
+    let o = Right (func args) in
+    (o, checker o)
+  with e -> (Left e, checker (Left e));;
 
 (* basic testing function
  * msg : message string to associate with the test
@@ -76,25 +85,31 @@ let catcher func args = try Right (func args) with e -> Left e;;
  * ans : expected output
  * returns report
 *)
-(* TODO compare before marshalling *)
-(* TODO deal with failure *)
-let otest ?msg:(m="") ?timeout:(t=5) 
+let test ?msg:(m="") ?timeout:(t=5) 
           func args ans
           eq show_in show_out =
   fun () ->
     if m = "" then () else !logger_fun (Printf.sprintf "\t%s\n" m);
     let (s, inc) = 
-      (match timeout (catcher func) args t None with
+      (match timeout (catcher func eq) args t None with
       | None ->
-          (Printf.sprintf "\t[FAIL] timed out after %i seconds:%s\n" t (show_in args), false)
-      | Some (Left e) ->
-          (Printf.sprintf "\t[FAIL] Exception %s:%s\n" (Printexc.to_string e) (show_in args), false)
-      | Some (Right o) when eq o ans ->
-          (Printf.sprintf "\t[PASS]\t%s\n" (show_in args), true)
-      | Some (Right o) ->
+          (Printf.sprintf "\t[FAIL] timed out after %i seconds on: %s\n" t (show_in args), false)
+      | Some (_, true) ->
+          (Printf.sprintf "\t[PASS]\tinput: %s\n" (show_in args), true)
+      | Some (Left e, false) ->
+          (Printf.sprintf "\t[FAIL] Exception on %s: %s\n" (show_in args) (Printexc.to_string e), false)
+      | Some (Right o, false) ->
           (Printf.sprintf "\t[FAIL]\tGot: %s | Expected: %s\n" (show_in args) (show_out ans), false)) in
     if inc then inc_pass_count () else inc_fail_count ();
     !logger_fun s
+
+let otest ?msg:(m="") ?timeout:(t=5) 
+          func args ans
+          eq = test ~msg:m ~timeout:t func args ans (from_either (const false) (eq ans))
+
+let ftest ?msg:(m="") ?timeout:(t=5) 
+          func args exc
+          eq = test ~msg:m ~timeout:t func args exc (from_either (eq exc) (const false))
 
 let tgroup ?msg:(m="") tests =
   fun () ->
