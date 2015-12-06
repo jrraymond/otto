@@ -116,7 +116,7 @@ let test ?msg:(m="") ?timeout:(t=5)
       | Some (Left e, false) ->
           (Printf.sprintf "\t[FAIL] Exception on %s: %s\n" (show_in args) (Printexc.to_string e), false)
       | Some (Right o, false) ->
-          (Printf.sprintf "\t[FAIL]\tGot: %s | Expected: %s\n" (show_in args) (show_out ans), false)) in
+          (Printf.sprintf "\t[FAIL]\tinput: %s\n\tGot: %s | Expected: %s\n" (show_in args) (show_out o) (show_out ans), false)) in
     if inc then inc_pass_count () else inc_fail_count ();
     !logger_fun s
 

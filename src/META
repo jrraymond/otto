@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: a76a25af5fdef1ed0a71c8d97f353552)
+version = "0.0.1"
+description = "Auto-grading framework"
+requires = "unix"
+archive(byte) = "otto.cma"
+archive(byte, plugin) = "otto.cma"
+archive(native) = "otto.cmxa"
+archive(native, plugin) = "otto.cmxs"
+exists_if = "otto.cma"
+# OASIS_STOP
+
