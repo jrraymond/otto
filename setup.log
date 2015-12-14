@@ -1,4 +1,3 @@
-"install-findlib" "otto"
 "is_built_lib_otto" "true"
 "built_lib_otto" "/home/justin/code/otto/_build/src/otto.cma"
 "built_lib_otto" "/home/justin/code/otto/_build/src/otto.cmxa"
@@ -11,7 +10,6 @@
 "built_lib_otto" "/home/justin/code/otto/_build/src/otto.cmx"
 "is_built_exec_test" "true"
 "built_exec_test" "/home/justin/code/otto/_build/test/test.byte"
-"install-findlib" "otto"
 "is_built_lib_otto" "true"
 "built_lib_otto" "/home/justin/code/otto/_build/src/otto.cma"
 "built_lib_otto" "/home/justin/code/otto/_build/src/otto.cmxa"

@@ -116,17 +116,20 @@ let test ?msg:(m="") ?timeout:(t=5)
       | Some (Left e, false) ->
           (Printf.sprintf "\t[FAIL] Exception on %s: %s\n" (show_in args) (Printexc.to_string e), false)
       | Some (Right o, false) ->
-          (Printf.sprintf "\t[FAIL]\tinput: %s\n\tGot: %s | Expected: %s\n" (show_in args) (show_out o) (show_out ans), false)) in
+          let ans_s = from_either Printexc.to_string show_out ans in
+          let arg_s = show_in args in
+          let o_s = show_out o in
+          (Printf.sprintf "\t[FAIL]\tinput: %s\n\tGot: %s | Expected: %s\n" arg_s o_s ans_s, false)) in
     if inc then inc_pass_count () else inc_fail_count ();
     !logger_fun s
 
 let otest ?msg:(m="") ?timeout:(t=5) 
           func args ans
-          eq = test ~msg:m ~timeout:t func args ans (from_either (const false) (eq ans))
+          eq = test ~msg:m ~timeout:t func args (Right ans) (from_either (const false) (eq ans))
 
 let ftest ?msg:(m="") ?timeout:(t=5) 
           func args exc
-          eq = test ~msg:m ~timeout:t func args exc (from_either (eq exc) (const false))
+          eq = test ~msg:m ~timeout:t func args (Left exc) (from_either (eq exc) (const false))
 
 let tgroup ?msg:(m="") tests =
   fun () ->
