@@ -1,0 +1,21 @@
+opam-version: "2.0"
+name: "otto"
+version: "0.0.1"
+maintainer: "Justin Raymond <justin.raymond.14@gmail.com>"
+authors: "Justin Raymond <justin.raymond.14@gmail.com>"
+homepage: "https://github.com/jrraymond/otto"
+bug-reports: "https://github.com/jrraymond/otto"
+license: "LGPL 2.1 with OCaml linking exception"
+dev-repo: "git://github.com/jrraymond/otto.git"
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name] {with-test}
+  ["dune" "build" "@doc" "-p" name] {with-doc}
+]
+depends: [
+  "dune" {build & >= "1.11.0"}
+]
+synopsis: "Otto is a testing / autograding library"
+description: """
+Otto is designed to any easy to use testing library designed specifically for autograding. Otto makes it simple to get started writing tests, and is robust. For example, it is built to handle functions that loop infinitely without allocating.
+"""

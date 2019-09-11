@@ -1,0 +1,6 @@
+(library
+  (name otto)
+  (public_name otto)
+  (wrapped false)
+  (libraries unix)
+  (modules otto))
