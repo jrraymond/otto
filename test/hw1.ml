@@ -5,7 +5,7 @@ type term =
   | TmApp of term * term
   | TmAbs of string * term
 
-type dbterm = 
+type dbterm =
   | DbTmVar of int
   | DbTmApp of dbterm * dbterm
   | DbTmAbs of dbterm
@@ -44,7 +44,7 @@ let rec db2lam ctx tm =
                   TmAbs (x, db2lam (x::ctx) t1)
   | DbTmApp (t1,t2) -> TmApp (db2lam ctx t1, db2lam ctx t2)
 
-let rec lam2db ctx tm = 
+let rec lam2db ctx tm =
   match tm with
   | TmVar x -> DbTmVar (index_of x ctx)
   | TmAbs (x,t1) -> DbTmAbs (lam2db (x::ctx) t1)
@@ -52,6 +52,6 @@ let rec lam2db ctx tm =
 
 let rec bad_will_loop x = bad_will_loop x
 
-let rec bad_will_fail x = raise NO_RULE
+let bad_will_fail _ = raise NO_RULE
 
-let rec should_fail x = raise NO_RULE
+let should_fail _ = raise NO_RULE
